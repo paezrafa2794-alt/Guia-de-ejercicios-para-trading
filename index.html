@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinMath Academy — Guía de Ejercicios</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#030b18;--bg1:#061226;--bg2:#091a36;--bg3:#0d2244;--bg4:#122850;
+  --blue1:#1a4aff;--blue2:#2d6aff;--blue3:#4d8fff;--blue4:#7fb3ff;
+  --cyan1:#00c8e0;--cyan2:#22d9ee;--teal:#00e5c0;--gold:#ffc030;
+  --green:#00e090;--red:#ff4d6a;--orange:#ff8c00;--purple:#a855f7;
+  --text0:#e8f3ff;--text1:#9bbedd;--text2:#5580a0;--text3:#2d5070;
+  --border:rgba(80,160,255,0.1);--border2:rgba(80,160,255,0.22);
+  --r:16px;--rs:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg0);color:var(--text0);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 900px 700px at 15% 10%,rgba(45,106,255,0.07),transparent 60%),radial-gradient(ellipse 700px 600px at 85% 80%,rgba(0,200,224,0.05),transparent 55%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(80,160,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(80,160,255,0.022) 1px,transparent 1px);background-size:55px 55px;pointer-events:none;z-index:0}
+
+/* ── HEADER ── */
+.hero{position:relative;z-index:1;text-align:center;padding:60px 24px 40px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;background:rgba(45,106,255,0.12);border:1px solid rgba(45,106,255,0.28);border-radius:20px;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--cyan2);letter-spacing:.5px;margin-bottom:20px}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,5vw,52px);line-height:1.1;margin-bottom:14px}
+.hero h1 span{background:linear-gradient(90deg,var(--blue4),var(--cyan2),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:15px;color:var(--text1);max-width:640px;margin:0 auto 28px;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.hstat{text-align:center}
+.hstat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;background:linear-gradient(90deg,var(--blue4),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hstat-lab{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+/* ── LAYOUT ── */
+.container{max-width:1100px;margin:0 auto;padding:0 20px 80px;position:relative;z-index:1}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:18px 24px;margin-bottom:30px}
+.pb-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.pb-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.pb-count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cyan2);font-weight:700}
+.pb-track{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.pb-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue1),var(--cyan1),var(--teal));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+.pb-steps{display:flex;justify-content:space-between;margin-top:8px}
+.pb-step{width:16px;height:16px;border-radius:50%;border:2px solid var(--bg4);background:var(--bg4);transition:all .3s;cursor:default;flex-shrink:0}
+.pb-step.done{background:var(--green);border-color:var(--green);box-shadow:0 0 6px rgba(0,224,144,0.4)}
+.pb-step.current{background:var(--blue2);border-color:var(--cyan1);box-shadow:0 0 8px rgba(0,200,224,0.5);animation:pulse-step 1.5s ease infinite}
+@keyframes pulse-step{0%,100%{box-shadow:0 0 6px rgba(0,200,224,0.4)}50%{box-shadow:0 0 14px rgba(0,200,224,0.8)}}
+
+/* ── SECTION HEADER ── */
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;margin-top:36px}
+.sh-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sh-icon.blue{background:linear-gradient(135deg,rgba(45,106,255,0.3),rgba(0,200,224,0.2));border:1px solid rgba(45,106,255,0.3)}
+.sh-icon.green{background:linear-gradient(135deg,rgba(0,224,144,0.25),rgba(0,200,224,0.15));border:1px solid rgba(0,224,144,0.3)}
+.sh-icon.gold{background:linear-gradient(135deg,rgba(255,192,48,0.25),rgba(255,140,0,0.15));border:1px solid rgba(255,192,48,0.3)}
+.sh-icon.red{background:linear-gradient(135deg,rgba(255,77,106,0.25),rgba(255,140,0,0.1));border:1px solid rgba(255,77,106,0.3)}
+.sh-icon.purple{background:linear-gradient(135deg,rgba(168,85,247,0.25),rgba(45,106,255,0.15));border:1px solid rgba(168,85,247,0.3)}
+.sh-text h2{font-family:'Syne',sans-serif;font-weight:800;font-size:18px}
+.sh-text p{font-size:12.5px;color:var(--text2);margin-top:2px}
+
+/* ── EXERCISE CARD ── */
+.ex-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s;position:relative}
+.ex-card.completed{border-color:rgba(0,224,144,0.3);background:linear-gradient(135deg,rgba(0,224,144,0.04),var(--bg1))}
+.ex-card:hover{border-color:var(--border2)}
+.ex-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--bg4);border-radius:2px 0 0 2px;transition:background .3s}
+.ex-card.completed::before{background:linear-gradient(180deg,var(--green),var(--teal))}
+.ex-card.active-ex::before{background:linear-gradient(180deg,var(--blue2),var(--cyan1))}
+
+.ex-header{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none}
+.ex-num{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;flex-shrink:0;background:var(--bg3);color:var(--text2);border:1px solid var(--border);transition:all .3s}
+.ex-card.completed .ex-num{background:rgba(0,224,144,0.15);color:var(--green);border-color:rgba(0,224,144,0.3)}
+.ex-card.active-ex .ex-num{background:rgba(45,106,255,0.2);color:var(--blue4);border-color:rgba(45,106,255,0.3)}
+.ex-title-wrap{flex:1}
+.ex-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text0)}
+.ex-meta{display:flex;align-items:center;gap:8px;margin-top:3px}
+.ex-tag{padding:2px 8px;border-radius:8px;font-size:9.5px;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.5px}
+.tag-simple{background:rgba(127,179,255,0.12);color:var(--blue4);border:1px solid rgba(127,179,255,0.2)}
+.tag-compuesto{background:rgba(0,200,224,0.12);color:var(--cyan2);border:1px solid rgba(0,200,224,0.2)}
+.tag-trading{background:rgba(0,224,144,0.12);color:var(--green);border:1px solid rgba(0,224,144,0.2)}
+.tag-inversion{background:rgba(168,85,247,0.12);color:var(--purple);border:1px solid rgba(168,85,247,0.2)}
+.tag-riesgo{background:rgba(255,192,48,0.12);color:var(--gold);border:1px solid rgba(255,192,48,0.2)}
+.tag-perdida{background:rgba(255,77,106,0.12);color:var(--red);border:1px solid rgba(255,77,106,0.2)}
+.tag-amort{background:rgba(0,229,192,0.12);color:var(--teal);border:1px solid rgba(0,229,192,0.2)}
+.tag-anualidad{background:rgba(255,140,0,0.12);color:var(--orange);border:1px solid rgba(255,140,0,0.2)}
+.ex-difficulty{font-size:9.5px;color:var(--text2)}
+.ex-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .3s;background:transparent}
+.ex-card.completed .ex-check{background:var(--green);border-color:var(--green);color:#001a0e}
+.ex-chevron{color:var(--text2);font-size:12px;transition:transform .3s;flex-shrink:0}
+.ex-card.open .ex-chevron{transform:rotate(180deg)}
+
+.ex-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.ex-card.open .ex-body{display:block}
+
+.ex-instruction{background:linear-gradient(135deg,rgba(45,106,255,0.08),rgba(0,200,224,0.05));border:1px solid rgba(45,106,255,0.18);border-radius:var(--rs);padding:16px 18px;margin-top:14px;margin-bottom:14px}
+.ei-label{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan2);font-family:'JetBrains Mono',monospace;margin-bottom:8px}
+.ei-text{font-size:13.5px;color:var(--text0);line-height:1.75}
+.ei-text strong{color:var(--cyan2)}
+.ei-text em{color:var(--gold);font-style:normal;font-weight:600}
+.ei-steps{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+.ei-step{display:flex;gap:10px;align-items:flex-start}
+.ei-step-num{width:22px;height:22px;background:var(--blue1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.ei-step-text{font-size:13px;color:var(--text1);line-height:1.6;padding-top:2px}
+
+.ex-formula{background:rgba(0,0,0,0.25);border-left:3px solid var(--cyan2);border-radius:0 var(--rs) var(--rs) 0;padding:12px 16px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue5)}
+.ex-formula em{color:var(--cyan2);font-style:normal;font-weight:700}
+.ex-formula .fml-label{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
+
+.ex-tip{display:flex;gap:10px;background:rgba(255,192,48,0.07);border:1px solid rgba(255,192,48,0.2);border-radius:var(--rs);padding:11px 14px;font-size:12.5px;color:var(--text1);line-height:1.6}
+.ex-tip strong{color:var(--gold)}
+
+.ex-nav-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;transition:all .18s}
+.btn-mark{background:linear-gradient(135deg,var(--green),var(--teal));color:#001a0e}
+.btn-mark:hover{box-shadow:0 4px 16px rgba(0,224,144,0.35);transform:translateY(-1px)}
+.btn-unmark{background:rgba(255,77,106,0.15);color:var(--red);border:1px solid rgba(255,77,106,0.3)}
+.ex-actions{display:flex;gap:9px;align-items:center;margin-top:14px;flex-wrap:wrap}
+
+.ex-nav-hint{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.simulator-link{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(45,106,255,0.12);border:1px solid rgba(45,106,255,0.25);border-radius:20px;font-size:11.5px;color:var(--blue4);text-decoration:none;font-weight:600;transition:all .15s;cursor:pointer}
+.simulator-link:hover{background:rgba(45,106,255,0.22);border-color:rgba(45,106,255,0.4)}
+
+/* ── ANSWER INPUT ── */
+.ex-answer{margin-top:12px}
+.ea-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:5px}
+.ea-input{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);font-size:12.5px;color:var(--text0);outline:none;font-family:'DM Sans',sans-serif;resize:vertical;min-height:70px;transition:border-color .15s}
+.ea-input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(45,106,255,0.12)}
+.ea-saved{font-size:11px;color:var(--green);display:none;margin-top:4px}
+.ea-saved.visible{display:block}
+
+/* ── QUIZ SECTION ── */
+.quiz-section{background:var(--bg1);border:1px solid var(--border2);border-radius:var(--r);padding:28px;margin-top:36px;position:relative;overflow:hidden}
+.quiz-section::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(168,85,247,0.12),transparent 70%);border-radius:50%}
+.qs-header{text-align:center;margin-bottom:28px}
+.qs-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.28);border-radius:20px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--purple);margin-bottom:14px}
+.qs-title{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;margin-bottom:8px;background:linear-gradient(90deg,var(--purple),var(--blue4));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.qs-sub{font-size:13px;color:var(--text2);max-width:560px;margin:0 auto}
+
+.quiz-locked{text-align:center;padding:28px;background:rgba(0,0,0,0.2);border-radius:var(--rs);border:1px dashed rgba(80,160,255,0.15)}
+.ql-icon{font-size:42px;margin-bottom:10px}
+.ql-text{font-size:14px;color:var(--text2);margin-bottom:6px}
+.ql-progress{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue4);font-weight:700}
+
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:18px;margin-bottom:12px;transition:border-color .2s}
+.q-card.answered{border-color:rgba(0,224,144,0.25);background:linear-gradient(135deg,rgba(0,224,144,0.04),var(--bg2))}
+.q-num-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.q-num{width:28px;height:28px;border-radius:8px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.3);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--purple);flex-shrink:0}
+.q-card.answered .q-num{background:rgba(0,224,144,0.2);border-color:rgba(0,224,144,0.3);color:var(--green)}
+.q-text{font-size:13.5px;font-weight:600;color:var(--text0);line-height:1.5;flex:1}
+.q-context{font-size:11.5px;color:var(--text2);margin-bottom:10px;font-style:italic;line-height:1.5}
+.q-options{display:flex;flex-direction:column;gap:7px}
+.q-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:all .18s;font-size:13px;color:var(--text1)}
+.q-opt:hover{border-color:rgba(45,106,255,0.3);color:var(--text0);background:rgba(45,106,255,0.08)}
+.q-opt.selected-correct{border-color:var(--green);background:rgba(0,224,144,0.1);color:var(--green)}
+.q-opt.selected-wrong{border-color:var(--red);background:rgba(255,77,106,0.1);color:var(--red)}
+.q-opt.reveal-correct{border-color:rgba(0,224,144,0.4);background:rgba(0,224,144,0.06);color:var(--green)}
+.q-opt-letter{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0;border:1px solid var(--border)}
+.q-explanation{margin-top:10px;padding:10px 13px;background:rgba(0,200,224,0.07);border:1px solid rgba(0,200,224,0.2);border-radius:var(--rs);font-size:12px;color:var(--cyan2);display:none;line-height:1.6}
+.q-explanation.show{display:block}
+
+/* ── SCORE PANEL ── */
+.score-panel{background:linear-gradient(135deg,rgba(45,106,255,0.12),rgba(0,200,224,0.08));border:1px solid rgba(45,106,255,0.25);border-radius:var(--r);padding:28px;text-align:center;margin-top:20px;display:none}
+.score-panel.visible{display:block;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.score-value{font-family:'Syne',sans-serif;font-weight:800;font-size:58px;background:linear-gradient(90deg,var(--blue4),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.score-label{font-size:14px;color:var(--text2);margin-top:4px}
+.score-grade{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin-top:12px;padding:8px 20px;border-radius:20px;display:inline-block}
+.grade-a{background:rgba(0,224,144,0.15);color:var(--green);border:1px solid rgba(0,224,144,0.3)}
+.grade-b{background:rgba(0,200,224,0.15);color:var(--cyan2);border:1px solid rgba(0,200,224,0.3)}
+.grade-c{background:rgba(255,192,48,0.15);color:var(--gold);border:1px solid rgba(255,192,48,0.3)}
+.grade-d{background:rgba(255,77,106,0.15);color:var(--red);border:1px solid rgba(255,77,106,0.3)}
+.score-breakdown{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:20px}
+.sb-item{background:rgba(255,255,255,0.04);border-radius:var(--rs);padding:12px 8px;text-align:center}
+.sb-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700}
+.sb-lab{font-size:9.5px;color:var(--text2);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── RESTART BTN ── */
+.btn-restart{padding:10px 24px;background:linear-gradient(135deg,var(--blue1),var(--blue2));border:none;border-radius:var(--rs);color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px;transition:all .18s}
+.btn-restart:hover{box-shadow:0 4px 16px rgba(45,106,255,0.4);transform:translateY(-1px)}
+
+/* ── SUBMIT BTN ── */
+.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--purple),var(--blue2));border:none;border-radius:var(--rs);color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;margin-top:16px;transition:all .18s;letter-spacing:.3px}
+.btn-submit:hover{box-shadow:0 4px 20px rgba(168,85,247,0.4);transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:32px 20px;font-size:11.5px;color:var(--text3);position:relative;z-index:1}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:32px 0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){.hero h1{font-size:26px}.hero-stats{gap:20px}.score-breakdown{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📐 FinMath Academy · Bachillerato · Matemáticas Financieras</div>
+  <h1>Guía de <span>20 Ejercicios</span><br>Prácticos con el Simulador</h1>
+  <p>Sigue cada instrucción en el simulador FinMath Academy. Al completar todos los ejercicios, responde las 10 preguntas de análisis final para evaluar tu comprensión.</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-val">20</div><div class="hstat-lab">Ejercicios</div></div>
+    <div class="hstat"><div class="hstat-val">6</div><div class="hstat-lab">Módulos</div></div>
+    <div class="hstat"><div class="hstat-val">10</div><div class="hstat-lab">Preguntas finales</div></div>
+    <div class="hstat"><div class="hstat-val" id="pct-done">0%</div><div class="hstat-lab">Completado</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar-wrap">
+    <div class="pb-header">
+      <div class="pb-title">📊 Tu Progreso</div>
+      <div class="pb-count"><span id="prog-num">0</span> / 20 ejercicios completados</div>
+    </div>
+    <div class="pb-track"><div class="pb-fill" id="pb-fill"></div></div>
+    <div class="pb-steps" id="pb-steps"></div>
+  </div>
+
+  <!-- ────────────────────────────────────────
+       BLOQUE 1: INTERÉS SIMPLE
+  ──────────────────────────────────────── -->
+  <div class="section-header">
+    <div class="sh-icon blue">📈</div>
+    <div class="sh-text"><h2>Bloque 1 — Interés Simple</h2><p>Ejercicios 1–4 · Fórmula: I = P × r × t</p></div>
+  </div>
+
+  <!-- EJ 1 -->
+  <div class="ex-card" id="ex-1">
+    <div class="ex-header" onclick="toggleEx(1)">
+      <div class="ex-num">01</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Calcula tu primer interés simple</div>
+        <div class="ex-meta"><span class="ex-tag tag-simple">Interés Simple</span><span class="ex-difficulty">⭐ Básico</span></div>
+      </div>
+      <div class="ex-check">✓</div>
+      <div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Ve al módulo <strong>Interés Simple</strong> en el simulador. Configura los siguientes valores y observa cómo cambia el monto final:<br><br>
+        <strong>Capital P = $10,000</strong> · <strong>Tasa r = 7% anual</strong> · <strong>Tiempo t = 3 años</strong></div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Ajusta el slider de Capital a <em>$10,000</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Mueve el slider de Tasa hasta <em>7%</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Coloca el Tiempo en <em>3 años</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Lee el resultado: Monto Final (M) y el Interés (I)</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Haz clic en <em>"Aplicar interés a mi cuenta"</em> y verifica que tu saldo aumentó</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Fórmula aplicada</div>
+        <em>I = P × r × t</em> → I = $10,000 × 0.07 × 3 = <em>$2,100</em><br>
+        <em>M = P + I</em> → M = $10,000 + $2,100 = <em>$12,100</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>¿Notaste algo?</strong> Con interés simple, cada año se generan exactamente $700 (la misma cantidad). El interés NO crece, es constante. Eso lo diferencia del compuesto.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ Tu respuesta — ¿Cuál fue el monto final que obtuviste?</div>
+        <textarea class="ea-input" id="ans-1" placeholder="Escribe el monto final y qué observaste al aplicar el interés a tu cuenta..." oninput="saveAnswer(1)"></textarea>
+        <div class="ea-saved" id="saved-1">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(1)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-1" onclick="unmarkDone(1)" style="display:none">↩ Desmarcar</button>
+        <span class="ex-nav-hint">📌 Módulo: <span class="simulator-link" onclick="window.open('finmath-academy-v2.html','_blank')">Abrir Simulador ↗</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 2 -->
+  <div class="ex-card" id="ex-2">
+    <div class="ex-header" onclick="toggleEx(2)">
+      <div class="ex-num">02</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Compara tasas: ¿qué conviene más?</div>
+        <div class="ex-meta"><span class="ex-tag tag-simple">Interés Simple</span><span class="ex-difficulty">⭐ Básico</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Interés Simple</strong>, simula los tres escenarios y anota los resultados:<br><br>
+        <strong>Escenario A:</strong> P=$5,000 · r=5% · t=5 años<br>
+        <strong>Escenario B:</strong> P=$5,000 · r=10% · t=5 años<br>
+        <strong>Escenario C:</strong> P=$5,000 · r=5% · t=10 años</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Simula cada escenario y anota el <em>Interés (I)</em> generado en cada uno</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Compara: ¿duplicar la tasa o duplicar el tiempo da el mismo resultado?</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Aplica el Escenario B a tu cuenta</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Clave conceptual</div>
+        En I.S., duplicar <em>r</em> o duplicar <em>t</em> produce el mismo efecto en el interés: ambos duplican I.<br>
+        I_A = 5000×0.05×5 = <em>$1,250</em> · I_B = <em>$2,500</em> · I_C = <em>$2,500</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Concepto clave:</strong> En interés simple, la tasa y el tiempo tienen un <strong>efecto lineal y simétrico</strong> sobre el interés. Esto no ocurre en el compuesto.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Qué escenario aplicaste? ¿Notaste que B y C dan el mismo interés?</div>
+        <textarea class="ea-input" id="ans-2" placeholder="Describe los tres resultados y tu conclusión sobre la relación tasa-tiempo..." oninput="saveAnswer(2)"></textarea>
+        <div class="ea-saved" id="saved-2">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(2)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-2" onclick="unmarkDone(2)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 3 -->
+  <div class="ex-card" id="ex-3">
+    <div class="ex-header" onclick="toggleEx(3)">
+      <div class="ex-num">03</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Simula un CETES real a 28 días</div>
+        <div class="ex-meta"><span class="ex-tag tag-simple">Interés Simple</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Los <strong>CETES</strong> usan interés simple y se expresan en días. Configura:<br><br>
+        <strong>P = $20,000</strong> · <strong>Tasa = 10.5% anual</strong> · <strong>Tiempo = 1 año (como aproximación)</strong><br><br>
+        Luego calcula manualmente cuánto generarías en 28 días: <em>I = P × r × (28/360)</em></div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Simula en el módulo con los valores dados</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Calcula manualmente: I = $20,000 × 0.105 × (28/360)</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">También ve a <em>Inversiones → CETES 28 días</em> y compra 20 títulos</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Verifica cómo se registra en tu portafolio</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Cálculo CETES 28 días</div>
+        I = $20,000 × 0.105 × (28/360) = <em>$163.33</em> en 28 días<br>
+        Rendimiento anualizado: 10.50% — La tasa libre de riesgo de México
+      </div>
+      <div class="ex-tip">💡 <div><strong>¿Por qué 360 y no 365?</strong> En México, los instrumentos de deuda usan <strong>año comercial de 360 días</strong>. En EE.UU. se usan 365 para algunos instrumentos.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto calculaste que ganarías en 28 días con $20,000?</div>
+        <textarea class="ea-input" id="ans-3" placeholder="Escribe el cálculo manual y el resultado obtenido en el simulador..." oninput="saveAnswer(3)"></textarea>
+        <div class="ea-saved" id="saved-3">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(3)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-3" onclick="unmarkDone(3)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 4 -->
+  <div class="ex-card" id="ex-4">
+    <div class="ex-header" onclick="toggleEx(4)">
+      <div class="ex-num">04</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Despejar variables: ¿cuánto tiempo necesito?</div>
+        <div class="ex-meta"><span class="ex-tag tag-simple">Interés Simple</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Tienes <strong>$8,000</strong> y quieres ganar <strong>$2,000 de interés</strong> con una tasa del <strong>5% anual</strong>. ¿Cuántos años necesitas? Usa la fórmula despejada y después verifica en el simulador ajustando el tiempo.</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Calcula manualmente: <em>t = I / (P × r)</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Abre el módulo Interés Simple con P=$8,000 y r=5%</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Mueve el slider de tiempo hasta que el Interés muestre $2,000</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Confirma que coincide con tu cálculo</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Despeje de tiempo</div>
+        <em>t = I / (P × r)</em> → t = 2,000 / (8,000 × 0.05) = 2,000 / 400 = <em>5 años</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Habilidad clave:</strong> Despejar variables te permite resolver problemas reales como: "¿Cuánto capital necesito?" o "¿A qué tasa debo invertir?" — preguntas que cualquier persona enfrenta.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Coincidió tu cálculo con el simulador? Escribe el procedimiento</div>
+        <textarea class="ea-input" id="ans-4" placeholder="t = 2,000 / (8,000 × 0.05) = ..." oninput="saveAnswer(4)"></textarea>
+        <div class="ea-saved" id="saved-4">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(4)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-4" onclick="unmarkDone(4)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BLOQUE 2: INTERÉS COMPUESTO -->
+  <div class="section-header">
+    <div class="sh-icon green">🔁</div>
+    <div class="sh-text"><h2>Bloque 2 — Interés Compuesto</h2><p>Ejercicios 5–7 · Fórmula: M = P(1+r/n)^(nt)</p></div>
+  </div>
+
+  <!-- EJ 5 -->
+  <div class="ex-card" id="ex-5">
+    <div class="ex-header" onclick="toggleEx(5)">
+      <div class="ex-num">05</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Simple vs Compuesto: descubre la diferencia real</div>
+        <div class="ex-meta"><span class="ex-tag tag-compuesto">I. Compuesto</span><span class="ex-difficulty">⭐ Básico</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Interés Compuesto</strong>, usa <strong>P=$10,000 · r=8% · t=20 años · capitalización Anual (n=1)</strong>. Luego en <strong>Interés Simple</strong> usa los mismos valores. Compara las barras de comparación.</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Calcula con Interés Compuesto (n=1) y anota el Monto Final</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Calcula con Interés Simple los mismos parámetros</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Observa la <em>barra comparativa</em> en el módulo compuesto</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Aplica el resultado compuesto a tu cuenta</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Comparación a 20 años al 8%</div>
+        Simple: M = 10,000(1+0.08×20) = <em>$26,000</em><br>
+        Compuesto anual: M = 10,000(1.08)²⁰ = <em>$46,609.57</em><br>
+        Diferencia: <em>+$20,609.57</em> gracias a la capitalización
+      </div>
+      <div class="ex-tip">💡 <div><strong>¡Impresionante diferencia!</strong> A 20 años el interés compuesto genera casi el <strong>doble</strong> que el simple con los mismos parámetros. Esto es el <strong>efecto del tiempo</strong> en las finanzas.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto fue la diferencia entre ambos métodos?</div>
+        <textarea class="ea-input" id="ans-5" placeholder="Monto Simple: $... · Monto Compuesto: $... · Diferencia: $..." oninput="saveAnswer(5)"></textarea>
+        <div class="ea-saved" id="saved-5">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(5)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-5" onclick="unmarkDone(5)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 6 -->
+  <div class="ex-card" id="ex-6">
+    <div class="ex-header" onclick="toggleEx(6)">
+      <div class="ex-num">06</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">El impacto de la frecuencia de capitalización</div>
+        <div class="ex-meta"><span class="ex-tag tag-compuesto">I. Compuesto</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Con <strong>P=$5,000 · r=10% · t=5 años</strong>, prueba cada frecuencia de capitalización: <em>Anual, Semestral, Trimestral, Mensual y Diario</em>. Anota el Monto Final y la TEA de cada uno.</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Cambia el selector de capitalización para cada n=1, 2, 4, 12, 365</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Registra la TEA (Tasa Efectiva Anual) en cada caso</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Concluye: ¿qué frecuencia conviene más al inversionista?</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">TEA y frecuencia</div>
+        <em>TEA = (1 + r/n)ⁿ − 1</em><br>
+        n=1: TEA=10.00% · n=12: TEA=10.47% · n=365: TEA≈<em>10.52%</em><br>
+        Mayor capitalización → Mayor rendimiento efectivo
+      </div>
+      <div class="ex-tip">💡 <div><strong>Concepto TEA:</strong> Dos instrumentos con la misma tasa nominal pero diferente capitalización <strong>NO son iguales</strong>. Siempre compara con la TEA.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ Anota la TEA para cada n y tu conclusión</div>
+        <textarea class="ea-input" id="ans-6" placeholder="n=1: TEA=... | n=2: TEA=... | n=4: TEA=... | n=12: TEA=... | n=365: TEA=..." oninput="saveAnswer(6)"></textarea>
+        <div class="ea-saved" id="saved-6">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(6)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-6" onclick="unmarkDone(6)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 7 -->
+  <div class="ex-card" id="ex-7">
+    <div class="ex-header" onclick="toggleEx(7)">
+      <div class="ex-num">07</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">La Regla del 72: estima cuándo duplicas tu dinero</div>
+        <div class="ex-meta"><span class="ex-tag tag-compuesto">I. Compuesto</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En <strong>Interés Compuesto</strong>, con <strong>P=$3,000</strong>, prueba estas tasas y verifica la Regla del 72: <em>6%, 9%, 12%, 18%, 24%</em>. Para cada tasa, ajusta el tiempo hasta que el Monto sea aproximadamente el doble ($6,000).</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Para r=6%: mueve el tiempo hasta M≈$6,000. ¿En cuántos años?</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Compara con la Regla del 72: <em>t ≈ 72 / 6 = 12 años</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Repite para las otras tasas y verifica que la regla es bastante precisa</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Aplica el escenario de r=12% a tu cuenta</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Regla del 72</div>
+        <em>t ≈ 72 / r%</em> &nbsp;→&nbsp; r=6%: t≈12a · r=9%: t≈8a · r=12%: t≈6a · r=18%: t≈4a · r=24%: t≈3a
+      </div>
+      <div class="ex-tip">💡 <div><strong>Uso práctico:</strong> Si una cuenta te ofrece 4% anual, sabes que tu dinero tardará <strong>18 años en duplicarse</strong>. Con 12%, solo <strong>6 años</strong>. Esta regla es la más usada en finanzas personales.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuántos años tardó en duplicarse para cada tasa?</div>
+        <textarea class="ea-input" id="ans-7" placeholder="6%→... años | 9%→... años | 12%→... años | 18%→... años | 24%→... años" oninput="saveAnswer(7)"></textarea>
+        <div class="ea-saved" id="saved-7">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(7)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-7" onclick="unmarkDone(7)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BLOQUE 3: TRADING E INVERSIONES -->
+  <div class="section-header">
+    <div class="sh-icon gold">⚡</div>
+    <div class="sh-text"><h2>Bloque 3 — Trading e Inversiones</h2><p>Ejercicios 8–13 · Mesa de operaciones y portafolio real</p></div>
+  </div>
+
+  <!-- EJ 8 -->
+  <div class="ex-card" id="ex-8">
+    <div class="ex-header" onclick="toggleEx(8)">
+      <div class="ex-num">08</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Tu primera compra en Bolsa: América Móvil</div>
+        <div class="ex-meta"><span class="ex-tag tag-trading">Trading</span><span class="ex-difficulty">⭐ Básico</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Ve al módulo <strong>Trading</strong>. Vas a ejecutar tu primera orden de compra en la Bolsa Mexicana de Valores:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Selecciona el activo <em>América Móvil (AMXL)</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Asegúrate de que el tipo de orden sea <em>"Market"</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Ingresa cantidad = <em>100 acciones</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Observa el costo total y la comisión (0.1%) antes de comprar</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Haz clic en <em>"COMPRAR"</em> y verifica la notificación</div></div>
+          <div class="ei-step"><div class="ei-step-num">6</div><div class="ei-step-text">Revisa en el Dashboard que la posición aparece en tu portafolio</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Costo de la operación</div>
+        Costo = 100 acciones × ~$17.30 = <em>$1,730</em><br>
+        Comisión = $1,730 × 0.001 = <em>$1.73</em><br>
+        Total desembolsado = <em>$1,731.73</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Concepto LONG:</strong> Cuando COMPRAS esperando que el precio SUBA, se llama posición LONG. Si el precio de AMXL sube a $18, ganarías: (18-17.30) × 100 = <strong>$70</strong>.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto costó la operación total incluyendo comisión?</div>
+        <textarea class="ea-input" id="ans-8" placeholder="Precio por acción: $... | Cantidad: 100 | Comisión: $... | Total: $..." oninput="saveAnswer(8)"></textarea>
+        <div class="ea-saved" id="saved-8">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(8)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-8" onclick="unmarkDone(8)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 9 -->
+  <div class="ex-card" id="ex-9">
+    <div class="ex-header" onclick="toggleEx(9)">
+      <div class="ex-num">09</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Diversifica tu portafolio con 3 activos distintos</div>
+        <div class="ex-meta"><span class="ex-tag tag-trading">Trading</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">La <strong>diversificación</strong> reduce el riesgo. Compra exactamente estos tres activos en el módulo Trading:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Compra <em>50 acciones de FEMSA</em> (empresa mexicana estable)</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Compra <em>5 unidades de ORO (XAU)</em> (activo refugio)</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Compra <em>10 acciones de SPY ETF</em> (mercado americano)</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Ve al Dashboard y observa tu portafolio completo con los 3 activos</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Espera 15 segundos y observa cómo fluctúan los precios automáticamente</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Principio de diversificación</div>
+        Portafolio diversificado: México + Commodities + EE.UU.<br>
+        Correlación negativa: si Bolsa MX baja, ORO generalmente sube<br>
+        <em>Riesgo total &lt; Suma de riesgos individuales</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Regla práctica:</strong> Nunca pongas más del <strong>20% de tu capital</strong> en un solo activo. La diversificación no elimina el riesgo de mercado pero sí el riesgo específico de empresa.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto capital total invertiste en los 3 activos? ¿Cuánto te queda disponible?</div>
+        <textarea class="ea-input" id="ans-9" placeholder="FEMSA: $... | ORO: $... | SPY: $... | Total invertido: $... | Saldo restante: $..." oninput="saveAnswer(9)"></textarea>
+        <div class="ea-saved" id="saved-9">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(9)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-9" onclick="unmarkDone(9)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 10 -->
+  <div class="ex-card" id="ex-10">
+    <div class="ex-header" onclick="toggleEx(10)">
+      <div class="ex-num">10</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Invierte en el módulo de Inversiones: FIBRA + CETES</div>
+        <div class="ex-meta"><span class="ex-tag tag-inversion">Inversión</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Inversiones</strong>, realiza estas dos compras estratégicas para equilibrar riesgo y rendimiento:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Filtra por <em>"Bienes Raíces"</em> y compra <em>100 títulos de FIBRA UNO (FUNO)</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Filtra por <em>"Deuda Pública"</em> y compra <em>5 títulos de CETES 28 días</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Verifica que ambas inversiones aparecen en la tabla <em>"Inversiones Almacenadas"</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Observa las etiquetas de categoría: FIBRA=Bienes Raíces · CETES=Deuda</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Revisa el Dashboard y confirma que aparecen como "INVERSIÓN" en tu portafolio</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Tipo de activos</div>
+        FIBRA: Renta fija + plusvalía inmobiliaria ≈ 7-11% anual<br>
+        CETES: Instrumento libre de riesgo ≈ 10.5% anual (tasa actual MX)<br>
+        <em>Estrategia conservadora pero rentable para principiantes</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Las FIBRAS</strong> son la forma de invertir en bienes raíces sin necesidad de comprar un inmueble completo. Con solo $24.80 puedes ser <strong>copropietario</strong> de centros comerciales y oficinas.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Qué diferencia hay entre comprar en Trading vs. Inversiones en el simulador?</div>
+        <textarea class="ea-input" id="ans-10" placeholder="En Trading... | En Inversiones... | La diferencia es que..." oninput="saveAnswer(10)"></textarea>
+        <div class="ea-saved" id="saved-10">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(10)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-10" onclick="unmarkDone(10)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 11 -->
+  <div class="ex-card" id="ex-11">
+    <div class="ex-header" onclick="toggleEx(11)">
+      <div class="ex-num">11</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Cierra una posición con ganancia y analiza el P&L</div>
+        <div class="ex-meta"><span class="ex-tag tag-trading">Trading</span><span class="ex-difficulty">⭐⭐⭐ Avanzado</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Vas a cerrar una de tus posiciones abiertas y analizar el resultado. Esta es la operación más importante en trading: <strong>materializar ganancias o pérdidas</strong>.</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Ve al módulo Trading → sección <em>"Posiciones Abiertas"</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Espera 10-15 segundos hasta que el precio fluctúe y el P&L cambie</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Cierra la posición que muestre <em>P&L positivo (ganancia)</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Revisa el Dashboard: tu saldo debe haber aumentado</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Calcula manualmente: P&L = (precio_cierre - precio_entrada) × cantidad</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Cálculo P&L</div>
+        <em>P&L = (P_cierre − P_entrada) × Cantidad</em><br>
+        Si compré 100 AMXL a $17.30 y vendí a $17.55:<br>
+        P&L = (17.55 − 17.30) × 100 = <em>+$25.00</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>P&L = Profit &amp; Loss.</strong> Es la métrica más importante en trading. Se divide en <strong>P&L no realizado</strong> (posición abierta) y <strong>P&L realizado</strong> (posición cerrada). Solo el realizado afecta tu saldo real.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Qué posición cerraste? ¿Fue ganancia o pérdida? ¿Por cuánto?</div>
+        <textarea class="ea-input" id="ans-11" placeholder="Cerré... | Precio entrada: $... | Precio cierre: $... | P&L: +/- $..." oninput="saveAnswer(11)"></textarea>
+        <div class="ea-saved" id="saved-11">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(11)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-11" onclick="unmarkDone(11)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 12 -->
+  <div class="ex-card" id="ex-12">
+    <div class="ex-header" onclick="toggleEx(12)">
+      <div class="ex-num">12</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Invierte en tecnología: Apple y NVIDIA</div>
+        <div class="ex-meta"><span class="ex-tag tag-inversion">Inversión</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Inversiones</strong>, filtra por <em>"Acciones"</em> y realiza inversiones en tecnología norteamericana. Configura primero la cantidad deseada en el panel inferior.</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Ajusta la cantidad a <em>2 acciones</em> en el panel "Configurar Compra"</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Compra <em>2 acciones de Apple (AAPL)</em> a ~$189.50 c/u</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Cambia cantidad a <em>1 acción</em> y compra <em>1 acción de NVIDIA (NVDA)</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Observa la diferencia de riesgo: Apple=Riesgo Medio · NVIDIA=Alto Riesgo</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Verifica que ambas están en la tabla de inversiones almacenadas</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Comparativa de riesgo-rendimiento</div>
+        Apple (AAPL): +18% histórico anual · β≈1.2 · Riesgo medio<br>
+        NVIDIA (NVDA): +200% en 2 años · β≈2.1 · Riesgo muy alto<br>
+        <em>Mayor rendimiento esperado → Mayor volatilidad</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Beta (β):</strong> Si el mercado sube 10%, NVDA sube ~21% (β=2.1). Si el mercado cae 10%, NVDA cae ~21%. Es una espada de doble filo — gana más pero también pierde más.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto costó cada acción? ¿Qué activo consideras más apropiado para un principiante?</div>
+        <textarea class="ea-input" id="ans-12" placeholder="AAPL: $... × 2 = $... | NVDA: $... × 1 = $... | Para principiantes es mejor..." oninput="saveAnswer(12)"></textarea>
+        <div class="ea-saved" id="saved-12">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(12)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-12" onclick="unmarkDone(12)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 13 -->
+  <div class="ex-card" id="ex-13">
+    <div class="ex-header" onclick="toggleEx(13)">
+      <div class="ex-num">13</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">El orden de compra LÍMITE: compra inteligente</div>
+        <div class="ex-meta"><span class="ex-tag tag-trading">Trading</span><span class="ex-difficulty">⭐⭐⭐ Avanzado</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En Trading, usa el tipo de orden <strong>"Límite"</strong> para aprender a comprar por debajo del precio de mercado:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Selecciona <em>Bitcoin (BTC)</em> como activo</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Cambia el tipo de orden a <em>"Límite"</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Ingresa un precio límite <em>5% menor al precio actual</em> (ej: si BTC=$68,200, pon $64,790)</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Ingresa cantidad: <em>0.1 BTC</em> (escribe 1 en el campo)</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Ejecuta la orden y compara con una orden Market</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Tipos de órdenes</div>
+        <em>Market:</em> Se ejecuta inmediatamente al mejor precio disponible<br>
+        <em>Límite:</em> Se ejecuta solo cuando el precio llega a tu nivel<br>
+        <em>Stop-Loss:</em> Vende automáticamente si el precio cae a tu nivel de protección
+      </div>
+      <div class="ex-tip">💡 <div><strong>Stop-Loss es protección obligatoria.</strong> Todo trader profesional define su stop-loss <strong>antes</strong> de entrar a una operación. "Corta tus pérdidas rápido y deja correr tus ganancias."</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Qué diferencia hay entre una orden Market y una Límite? ¿Cuándo usarías cada una?</div>
+        <textarea class="ea-input" id="ans-13" placeholder="Market la usaría cuando... | Límite la usaría cuando... | Stop-Loss sirve para..." oninput="saveAnswer(13)"></textarea>
+        <div class="ea-saved" id="saved-13">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(13)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-13" onclick="unmarkDone(13)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BLOQUE 4: ANUALIDADES Y AMORTIZACIÓN -->
+  <div class="section-header">
+    <div class="sh-icon purple">📅</div>
+    <div class="sh-text"><h2>Bloque 4 — Anualidades y Amortización</h2><p>Ejercicios 14–16 · Pagos periódicos y créditos</p></div>
+  </div>
+
+  <!-- EJ 14 -->
+  <div class="ex-card" id="ex-14">
+    <div class="ex-header" onclick="toggleEx(14)">
+      <div class="ex-num">14</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Simula tu plan de ahorro para el retiro (AFORE)</div>
+        <div class="ex-meta"><span class="ex-tag tag-anualidad">Anualidades</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Anualidades</strong>, simula cuánto acumularías ahorrando mensualmente durante tu vida laboral:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Configura: PMT=<em>$1,500/mes</em> · Tasa=<em>8% anual</em> · Años=<em>30 años</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Observa el Valor Futuro (VF) y el total aportado</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Calcula: ¿cuánto es el interés generado vs. lo que depositaste?</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Ahora cambia a PMT=<em>$500/mes</em> · misma tasa y años · compara resultados</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Aplica el VF del escenario de $1,500 a tu cuenta</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Anualidad ordinaria (pagos al final del período)</div>
+        <em>VF = PMT × [(1+r)ⁿ−1] / r</em> &nbsp;(r mensual = 8%/12 = 0.667%)<br>
+        $1,500/mes × 30 años ≈ <em>$2,264,000</em> | Aportado: $540,000<br>
+        Interés generado por capitalización: ≈ <em>$1,724,000</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>El poder de empezar joven:</strong> Ahorrar $1,500/mes desde los 20 años te da ~$2.26M a los 50. Si empiezas a los 30, necesitarías ahorrar más del doble mensualmente para llegar al mismo resultado.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto se acumuló con $1,500/mes vs $500/mes? ¿Qué porcentaje fue interés?</div>
+        <textarea class="ea-input" id="ans-14" placeholder="Con $1,500: VF=$... | Aportado: $... | Interés: $... (%)... | Con $500: VF=$..." oninput="saveAnswer(14)"></textarea>
+        <div class="ea-saved" id="saved-14">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(14)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-14" onclick="unmarkDone(14)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 15 -->
+  <div class="ex-card" id="ex-15">
+    <div class="ex-header" onclick="toggleEx(15)">
+      <div class="ex-num">15</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Amortización de un crédito automotriz</div>
+        <div class="ex-meta"><span class="ex-tag tag-amort">Amortización</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Imagina que financias un automóvil. En el módulo <strong>Amortización</strong>, genera la tabla para:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Préstamo P=<em>$180,000</em> · Tasa=<em>18% anual</em> · Plazo=<em>48 meses</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Observa la cuota mensual y el total a pagar</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">En la tabla, revisa la columna <em>"% Capital"</em> del mes 1 vs el mes 24</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Calcula cuánto más pagas respecto al precio original del auto</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Cambia el sistema a <em>"Alemán (capital fijo)"</em> y observa la diferencia</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Sistema Francés (cuota fija)</div>
+        <em>C = P × [r(1+r)ⁿ] / [(1+r)ⁿ − 1]</em> &nbsp;(r = 18%/12 = 1.5%)<br>
+        C ≈ $5,284/mes | Total pagado ≈ $253,638<br>
+        Costo financiero: ≈ <em>$73,638 (41% extra)</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Al inicio pagas más interés que capital.</strong> En el mes 1, de tus $5,284 casi $2,700 son interés puro. Con el tiempo, la proporción se invierte. Por eso conviene hacer <strong>pagos anticipados a capital</strong>.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto es la cuota mensual y cuánto pagas en total? ¿Cuánto extra pagas vs el precio original?</div>
+        <textarea class="ea-input" id="ans-15" placeholder="Cuota mensual: $... | Total pagado: $... | Precio original: $180,000 | Extra: $... (%)..." oninput="saveAnswer(15)"></textarea>
+        <div class="ea-saved" id="saved-15">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(15)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-15" onclick="unmarkDone(15)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 16 -->
+  <div class="ex-card" id="ex-16">
+    <div class="ex-header" onclick="toggleEx(16)">
+      <div class="ex-num">16</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Hipoteca: el crédito más grande de tu vida</div>
+        <div class="ex-meta"><span class="ex-tag tag-amort">Amortización</span><span class="ex-difficulty">⭐⭐⭐ Avanzado</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Simula el crédito hipotecario más común en México. Compara dos plazos y analiza el impacto:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text"><strong>Escenario A:</strong> P=$800,000 · r=11% · 15 años (180 meses)</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text"><strong>Escenario B:</strong> P=$800,000 · r=11% · 20 años (240 meses)</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Compara: ¿cuánto menos pagas mensualmente con 20 años?</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Compara: ¿cuánto MÁS pagas en total con 20 años?</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Simula el préstamo en tu cuenta (módulo Amortización)</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Impacto del plazo en hipotecas</div>
+        15 años: ~$9,091/mes · Total: ~$1,636,380 · Interés: <em>$836,380</em><br>
+        20 años: ~$8,234/mes · Total: ~$1,976,160 · Interés: <em>$1,176,160</em><br>
+        Diferencia de interés: <em>+$339,780 por 5 años más de plazo</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Dilema real:</strong> Con 20 años pagas $857 menos al mes pero $339,780 MÁS en total. ¿Vale la pena ese "ahorro mensual"? Depende de en qué inviertas esos $857 mensuales extras.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Qué plazo elegirías y por qué? Justifica con los números</div>
+        <textarea class="ea-input" id="ans-16" placeholder="15 años: cuota $... total $... | 20 años: cuota $... total $... | Elegiría... porque..." oninput="saveAnswer(16)"></textarea>
+        <div class="ea-saved" id="saved-16">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(16)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-16" onclick="unmarkDone(16)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BLOQUE 5: RIESGO Y PÉRDIDAS -->
+  <div class="section-header">
+    <div class="sh-icon red">⚡</div>
+    <div class="sh-text"><h2>Bloque 5 — Riesgo, Pérdidas y Factores Externos</h2><p>Ejercicios 17–20 · Gestión del riesgo y escenarios adversos</p></div>
+  </div>
+
+  <!-- EJ 17 -->
+  <div class="ex-card" id="ex-17">
+    <div class="ex-header" onclick="toggleEx(17)">
+      <div class="ex-num">17</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Simula un crash de mercado en tu portafolio</div>
+        <div class="ex-meta"><span class="ex-tag tag-perdida">Pérdidas</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">Ve al módulo <strong>Pérdidas</strong>. Vas a experimentar en carne propia lo que se siente perder dinero en el mercado:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">En el escenario <em>"Crash del Mercado"</em>, ajusta el capital a <em>$5,000</em></div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Lee el monto de pérdida estimada antes de ejecutar</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Haz clic en <em>"Simular crash en cuenta"</em> y observa cómo cae tu saldo</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Lee la <em>Lección</em> que aparece en la tabla de registro</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">También simula el escenario de <em>"Fraude / Estafa"</em> con $2,000</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Cálculo de pérdida por crash</div>
+        <em>Pérdida = Capital_expuesto × %_caída</em><br>
+        Crash −30%: $5,000 × 0.30 = <em>−$1,500</em><br>
+        Drawdown = (Máx − Mín) / Máx = (5,000 − 3,500) / 5,000 = <em>30%</em>
+      </div>
+      <div class="ex-tip">💡 <div><strong>Los crashes ocurren.</strong> En 2008 el S&P500 cayó 57%. En COVID-2020 cayó 34% en 5 semanas. En 1994 la crisis del "Efecto Tequila" devaluó el peso 54%. <strong>El que no está preparado, pierde. El que está diversificado, sobrevive.</strong></div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto perdiste en el crash? ¿Cómo afectó tu saldo total?</div>
+        <textarea class="ea-input" id="ans-17" placeholder="Pérdida por crash: -$... | Pérdida por fraude: -$... | Saldo después: $... | Lección aprendida:..." oninput="saveAnswer(17)"></textarea>
+        <div class="ea-saved" id="saved-17">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(17)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-17" onclick="unmarkDone(17)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 18 -->
+  <div class="ex-card" id="ex-18">
+    <div class="ex-header" onclick="toggleEx(18)">
+      <div class="ex-num">18</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Riesgo e Inversión: el modelo CAPM y Sharpe Ratio</div>
+        <div class="ex-meta"><span class="ex-tag tag-riesgo">Riesgo</span><span class="ex-difficulty">⭐⭐⭐ Avanzado</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Riesgo &amp; Inversión</strong>, analiza los tres escenarios predefinidos y entiende los indicadores:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Selecciona el escenario <em>Conservador</em> · K=$30,000 · 10 años · sin factor externo</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Anota: Escenario optimista, base y pesimista · Sharpe Ratio · VaR</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Selecciona <em>Agresivo</em> con los mismos parámetros y compara</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Aplica el factor externo: <em>"Crisis financiera (−8%)"</em> al escenario agresivo</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text">Aplica el escenario base conservador a tu cuenta</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">CAPM y Sharpe</div>
+        <em>E(R) = Rf + β(Rm−Rf)</em> &nbsp;→ Rendimiento ajustado por riesgo<br>
+        <em>Sharpe = (R−Rf) / σ</em> &nbsp;→ Ganancia por unidad de riesgo tomado<br>
+        <em>VaR (95%) = Capital × σ × 1.645</em> &nbsp;→ Pérdida máxima probable
+      </div>
+      <div class="ex-tip">💡 <div><strong>Regla del Sharpe:</strong> Un Sharpe &gt;1 es bueno · &gt;2 es muy bueno · &gt;3 es excelente. Warren Buffett tiene un Sharpe histórico de ~0.76. Hedge funds top: 1.5-2.5.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ Conservador vs Agresivo: ¿cuál tuvo mejor Sharpe? ¿Qué pasó con la crisis?</div>
+        <textarea class="ea-input" id="ans-18" placeholder="Conservador: optimista $... | Sharpe: ... | Agresivo: optimista $... | Sharpe: ... | Con crisis: ..." oninput="saveAnswer(18)"></textarea>
+        <div class="ea-saved" id="saved-18">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(18)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-18" onclick="unmarkDone(18)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 19 -->
+  <div class="ex-card" id="ex-19">
+    <div class="ex-header" onclick="toggleEx(19)">
+      <div class="ex-num">19</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Inflación y devaluación: el enemigo silencioso</div>
+        <div class="ex-meta"><span class="ex-tag tag-perdida">Pérdidas</span><span class="ex-difficulty">⭐⭐ Intermedio</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción</div>
+        <div class="ei-text">En el módulo <strong>Pérdidas</strong>, simula dos escenarios macroeconómicos que afectan silenciosamente tus ahorros:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text">Escenario <em>"Inflación Alta"</em>: capital = <em>$50,000</em> en efectivo. Aplica la pérdida</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text">Escenario <em>"Devaluación del Peso"</em>: capital = <em>$100,000 MXN</em>. Aplica la pérdida</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text">Compara: ¿cuánto vale en USD tu $100,000 antes y después de la devaluación?</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text">Reflexiona: ¿qué instrumento habrías necesitado para protegerte?</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Ecuación de Fisher (Tasa Real)</div>
+        <em>r_real = (1 + r_nom) / (1 + inflación) − 1</em><br>
+        Si CETES paga 10.5% y la inflación es 6%:<br>
+        r_real = 1.105/1.06 − 1 = <em>4.25% real</em> (no 4.5% como sugeriría la resta simple)
+      </div>
+      <div class="ex-tip">💡 <div><strong>Si tu dinero está en el colchón:</strong> Con 6% de inflación, $50,000 hoy equivalen a $47,170 en un año en poder de compra. <strong>El efectivo SIN invertir PIERDE valor</strong>. Siempre debe estar trabajando.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ ¿Cuánto perdiste por inflación y devaluación combinadas? ¿Cómo te protegerías?</div>
+        <textarea class="ea-input" id="ans-19" placeholder="Pérdida inflación: -$... | Pérdida devaluación: -$... | Para protegerme invertiría en..." oninput="saveAnswer(19)"></textarea>
+        <div class="ea-saved" id="saved-19">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(19)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-19" onclick="unmarkDone(19)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJ 20 -->
+  <div class="ex-card" id="ex-20">
+    <div class="ex-header" onclick="toggleEx(20)">
+      <div class="ex-num">20</div>
+      <div class="ex-title-wrap">
+        <div class="ex-title">Estrategia completa: construye tu portafolio ideal</div>
+        <div class="ex-meta"><span class="ex-tag tag-riesgo">Integrador</span><span class="ex-tag tag-inversion">Inversión</span><span class="ex-difficulty">⭐⭐⭐ Desafío Final</span></div>
+      </div>
+      <div class="ex-check">✓</div><div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-instruction">
+        <div class="ei-label">📋 Instrucción — Ejercicio Integrador</div>
+        <div class="ei-text">Con el saldo actual de tu cuenta, diseña y ejecuta una <strong>estrategia de inversión completa</strong> aplicando todo lo aprendido:</div>
+        <div class="ei-steps">
+          <div class="ei-step"><div class="ei-step-num">1</div><div class="ei-step-text"><strong>Asignación:</strong> Decide cómo dividirás tu capital: % en renta fija, % en acciones, % en cripto (usa el módulo Riesgo para elegir perfil)</div></div>
+          <div class="ei-step"><div class="ei-step-num">2</div><div class="ei-step-text"><strong>Renta fija (30%+ del capital):</strong> Compra CETES o M-Bonos en el módulo Inversiones</div></div>
+          <div class="ei-step"><div class="ei-step-num">3</div><div class="ei-step-text"><strong>Renta variable (40-50%):</strong> Compra al menos 3 acciones de diferentes sectores en Trading</div></div>
+          <div class="ei-step"><div class="ei-step-num">4</div><div class="ei-step-text"><strong>Activo refugio (10-20%):</strong> Compra ORO para protección en crisis</div></div>
+          <div class="ei-step"><div class="ei-step-num">5</div><div class="ei-step-text"><strong>Riesgo alto (0-10% opcional):</strong> Si te queda saldo, considera cripto (BTC/ETH)</div></div>
+          <div class="ei-step"><div class="ei-step-num">6</div><div class="ei-step-text">Ve al Dashboard y analiza tu portafolio completo. Calcula el P&L total</div></div>
+        </div>
+      </div>
+      <div class="ex-formula">
+        <div class="fml-label">Principios del portafolio eficiente (Markowitz)</div>
+        No maximices rendimiento — maximiza <em>rendimiento ajustado por riesgo</em><br>
+        Portafolio diversificado: correlaciones negativas reducen σ_total<br>
+        Regla 60/40: 60% renta variable + 40% renta fija = estrategia clásica
+      </div>
+      <div class="ex-tip">💡 <div><strong>Felicidades, llegaste al ejercicio final.</strong> Un portafolio bien construido no es el que más gana, sino el que <strong>sobrevive los ciclos malos</strong> y aprovecha los buenos. La disciplina supera siempre al talento en finanzas.</div></div>
+      <div class="ex-answer">
+        <div class="ea-label">✏️ Describe tu estrategia de portafolio: ¿qué compraste y en qué porcentaje?</div>
+        <textarea class="ea-input" id="ans-20" placeholder="Mi portafolio: Renta fija: ...% ($...) | Acciones: ...% ($...) | ORO: ...% ($...) | Cripto: ...% ($...) | Justificación:..." oninput="saveAnswer(20)"></textarea>
+        <div class="ea-saved" id="saved-20">✓ Guardado</div>
+      </div>
+      <div class="ex-actions">
+        <button class="ex-nav-btn btn-mark" onclick="markDone(20)">✓ Marcar completado</button>
+        <button class="ex-nav-btn btn-unmark" id="unmark-20" onclick="unmarkDone(20)" style="display:none">↩ Desmarcar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════════════════════════════════════════
+       SECCIÓN DE PREGUNTAS FINALES
+  ════════════════════════════════════════ -->
+  <div class="quiz-section" id="quiz-section">
+    <div class="qs-header">
+      <div class="qs-badge">🏆 Evaluación Final</div>
+      <div class="qs-title">10 Preguntas de Análisis</div>
+      <div class="qs-sub">Responde basándote en lo que observaste y calculaste durante los 20 ejercicios. Cada pregunta tiene una sola respuesta correcta.</div>
+    </div>
+
+    <!-- LOCKED STATE -->
+    <div class="quiz-locked" id="quiz-locked">
+      <div class="ql-icon">🔒</div>
+      <div class="ql-text">Completa al menos 15 ejercicios para desbloquear las preguntas finales</div>
+      <div class="ql-progress" id="ql-prog-text">0 / 15 ejercicios completados</div>
+    </div>
+
+    <!-- QUESTIONS (hidden until unlocked) -->
+    <div id="quiz-questions" style="display:none">
+
+      <!-- Q1 -->
+      <div class="q-card" id="qc-1">
+        <div class="q-num-row"><div class="q-num">01</div><div class="q-text">En el ejercicio 1, invirtiste $10,000 al 7% durante 3 años con interés simple. ¿Cuánto interés generaste cada año?</div></div>
+        <div class="q-context">Recuerda: en interés simple el interés es constante. Revisa tu respuesta del ejercicio 1.</div>
+        <div class="q-options" id="qo-1">
+          <div class="q-opt" onclick="selectOpt(1,'A')"><div class="q-opt-letter">A</div>$210 cada año, porque la tasa cambia</div>
+          <div class="q-opt" onclick="selectOpt(1,'B')"><div class="q-opt-letter">B</div>$700 cada año, porque I=P×r siempre sobre el capital inicial</div>
+          <div class="q-opt" onclick="selectOpt(1,'C')"><div class="q-opt-letter">C</div>$700 el primer año, $714 el segundo, $728.28 el tercero</div>
+          <div class="q-opt" onclick="selectOpt(1,'D')"><div class="q-opt-letter">D</div>$2,100 cada año durante 3 años</div>
+        </div>
+        <div class="q-explanation" id="qe-1">✅ <strong>Correcto: B.</strong> En interés simple, I = P × r = $10,000 × 0.07 = $700 fijos cada año. El interés siempre se calcula sobre el capital original, nunca sobre el interés acumulado. Por eso a 3 años el total es $700 × 3 = $2,100.</div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-card" id="qc-2">
+        <div class="q-num-row"><div class="q-num">02</div><div class="q-text">En el ejercicio 5 comparaste interés simple vs compuesto a 20 años al 8% con $10,000. ¿Por qué el compuesto genera casi el doble?</div></div>
+        <div class="q-context">Piensa en qué ocurre con el interés generado en cada período en cada método.</div>
+        <div class="q-options" id="qo-2">
+          <div class="q-opt" onclick="selectOpt(2,'A')"><div class="q-opt-letter">A</div>Porque el compuesto usa una tasa mayor</div>
+          <div class="q-opt" onclick="selectOpt(2,'B')"><div class="q-opt-letter">B</div>Porque en el compuesto el interés también genera interés (capitalización)</div>
+          <div class="q-opt" onclick="selectOpt(2,'C')"><div class="q-opt-letter">C</div>Porque el compuesto aplica la tasa más veces al año</div>
+          <div class="q-opt" onclick="selectOpt(2,'D')"><div class="q-opt-letter">D</div>Porque en el compuesto el capital inicial es mayor</div>
+        </div>
+        <div class="q-explanation" id="qe-2">✅ <strong>Correcto: B.</strong> La capitalización hace que cada período el interés se sume al capital, y el siguiente período ese interés también genera interés. Con el tiempo, este efecto se acelera exponencialmente — es el "interés sobre el interés".</div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-card" id="qc-3">
+        <div class="q-num-row"><div class="q-num">03</div><div class="q-text">Aplicando la Regla del 72 (ejercicio 7): si inviertes al 9% anual, ¿en cuántos años aproximadamente se duplica tu capital?</div></div>
+        <div class="q-options" id="qo-3">
+          <div class="q-opt" onclick="selectOpt(3,'A')"><div class="q-opt-letter">A</div>4 años</div>
+          <div class="q-opt" onclick="selectOpt(3,'B')"><div class="q-opt-letter">B</div>9 años</div>
+          <div class="q-opt" onclick="selectOpt(3,'C')"><div class="q-opt-letter">C</div>8 años</div>
+          <div class="q-opt" onclick="selectOpt(3,'D')"><div class="q-opt-letter">D</div>18 años</div>
+        </div>
+        <div class="q-explanation" id="qe-3">✅ <strong>Correcto: C.</strong> Regla del 72: t = 72 / r% = 72 / 9 = 8 años. Esta regla es una aproximación muy precisa para tasas entre 6% y 20%. El valor exacto calculando con la fórmula compuesta es 8.04 años.</div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-card" id="qc-4">
+        <div class="q-num-row"><div class="q-num">04</div><div class="q-text">En el ejercicio 8 compraste acciones de AMXL a precio de mercado con una comisión del 0.1%. Si compraste 200 acciones a $17.30, ¿cuál fue el costo total de la operación?</div></div>
+        <div class="q-options" id="qo-4">
+          <div class="q-opt" onclick="selectOpt(4,'A')"><div class="q-opt-letter">A</div>$3,460.00 exactos</div>
+          <div class="q-opt" onclick="selectOpt(4,'B')"><div class="q-opt-letter">B</div>$3,456.54 (con descuento)</div>
+          <div class="q-opt" onclick="selectOpt(4,'C')"><div class="q-opt-letter">C</div>$3,463.46 (precio + comisión del 0.1%)</div>
+          <div class="q-opt" onclick="selectOpt(4,'D')"><div class="q-opt-letter">D</div>$3,500.00 redondeado</div>
+        </div>
+        <div class="q-explanation" id="qe-4">✅ <strong>Correcto: C.</strong> Costo base = 200 × $17.30 = $3,460. Comisión = $3,460 × 0.001 = $3.46. Total = $3,460 + $3.46 = $3,463.46. Las comisiones parecen pequeñas pero en trading frecuente se acumulan y destruyen rendimientos.</div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-card" id="qc-5">
+        <div class="q-num-row"><div class="q-num">05</div><div class="q-text">En el ejercicio 9 compraste 3 activos diferentes. ¿Qué principio financiero justifica esta estrategia?</div></div>
+        <div class="q-options" id="qo-5">
+          <div class="q-opt" onclick="selectOpt(5,'A')"><div class="q-opt-letter">A</div>Apalancamiento financiero</div>
+          <div class="q-opt" onclick="selectOpt(5,'B')"><div class="q-opt-letter">B</div>Diversificación: no poner todos los huevos en una canasta</div>
+          <div class="q-opt" onclick="selectOpt(5,'C')"><div class="q-opt-letter">C</div>Arbitraje de mercado</div>
+          <div class="q-opt" onclick="selectOpt(5,'D')"><div class="q-opt-letter">D</div>Especulación a corto plazo</div>
+        </div>
+        <div class="q-explanation" id="qe-5">✅ <strong>Correcto: B.</strong> La diversificación distribuye el riesgo entre activos con distintas correlaciones. Si FEMSA baja 20% por problemas en México, el ORO podría subir como activo refugio. El portafolio diversificado tiene menor riesgo que cualquiera de sus componentes por separado.</div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-card" id="qc-6">
+        <div class="q-num-row"><div class="q-num">06</div><div class="q-text">En el ejercicio 15 (crédito automotriz a 48 meses al 18%), observaste que al inicio de la tabla pagabas más interés que capital. ¿Cómo se llama este comportamiento?</div></div>
+        <div class="q-context">Esto es característico del sistema de amortización francés.</div>
+        <div class="q-options" id="qo-6">
+          <div class="q-opt" onclick="selectOpt(6,'A')"><div class="q-opt-letter">A</div>Amortización regresiva</div>
+          <div class="q-opt" onclick="selectOpt(6,'B')"><div class="q-opt-letter">B</div>Amortización progresiva: la proporción de capital en la cuota aumenta con el tiempo</div>
+          <div class="q-opt" onclick="selectOpt(6,'C')"><div class="q-opt-letter">C</div>Capitalización negativa</div>
+          <div class="q-opt" onclick="selectOpt(6,'D')"><div class="q-opt-letter">D</div>Tasa variable de interés</div>
+        </div>
+        <div class="q-explanation" id="qe-6">✅ <strong>Correcto: B.</strong> En el sistema francés, la cuota es fija pero su composición cambia: al principio la mayor parte es interés (porque el saldo deudor es alto) y al final es casi todo capital. Por eso conviene hacer pagos anticipados a capital al inicio del crédito.</div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-card" id="qc-7">
+        <div class="q-num-row"><div class="q-num">07</div><div class="q-text">En el ejercicio 17 simulaste un crash del mercado del −30%. Si tenías $5,000 invertidos, ¿cuánto te quedó y cuánto necesitas ganar para recuperarte completamente?</div></div>
+        <div class="q-options" id="qo-7">
+          <div class="q-opt" onclick="selectOpt(7,'A')"><div class="q-opt-letter">A</div>Te quedan $3,500 y necesitas ganar 30% para recuperarte</div>
+          <div class="q-opt" onclick="selectOpt(7,'B')"><div class="q-opt-letter">B</div>Te quedan $3,500 y necesitas ganar 42.86% sobre lo que te quedó para volver a $5,000</div>
+          <div class="q-opt" onclick="selectOpt(7,'C')"><div class="q-opt-letter">C</div>Te quedan $2,500 y necesitas ganar 100% para recuperarte</div>
+          <div class="q-opt" onclick="selectOpt(7,'D')"><div class="q-opt-letter">D</div>Te quedan $3,500 y necesitas ganar 50% para recuperarte</div>
+        </div>
+        <div class="q-explanation" id="qe-7">✅ <strong>Correcto: B.</strong> Si pierdes 30%, te quedan $3,500. Para volver a $5,000 necesitas ganar $1,500/$3,500 = 42.86%. Esto ilustra la asimetría de las pérdidas: una pérdida del 30% requiere una ganancia del 43% para recuperarse. Por eso el control del riesgo es más importante que maximizar ganancias.</div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-card" id="qc-8">
+        <div class="q-num-row"><div class="q-num">08</div><div class="q-text">En el ejercicio 19, $100,000 MXN en efectivo (sin invertir) durante un año con inflación del 6%, ¿qué le ocurre a su poder de compra?</div></div>
+        <div class="q-options" id="qo-8">
+          <div class="q-opt" onclick="selectOpt(8,'A')"><div class="q-opt-letter">A</div>Se mantiene igual porque los $100,000 siguen siendo $100,000</div>
+          <div class="q-opt" onclick="selectOpt(8,'B')"><div class="q-opt-letter">B</div>Aumenta porque el dinero acumula valor con el tiempo</div>
+          <div class="q-opt" onclick="selectOpt(8,'C')"><div class="q-opt-letter">C</div>Se reduce: equivale a tener ~$94,340 en poder de compra real</div>
+          <div class="q-opt" onclick="selectOpt(8,'D')"><div class="q-opt-letter">D</div>Se reduce exactamente a $94,000</div>
+        </div>
+        <div class="q-explanation" id="qe-8">✅ <strong>Correcto: C.</strong> Con inflación del 6%, el poder de compra real es $100,000 / 1.06 = $94,339.62. El número no cambia pero lo que puedes comprar con él sí. Esta es la razón por la que el efectivo siempre debe estar invertido al menos por encima de la tasa de inflación.</div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q-card" id="qc-9">
+        <div class="q-num-row"><div class="q-num">09</div><div class="q-text">En el ejercicio 14 (ahorro para el retiro), ahorrando $1,500/mes al 8% durante 30 años, ¿qué porcentaje aproximado del total acumulado provino del interés compuesto (no de tus aportaciones directas)?</div></div>
+        <div class="q-context">Total acumulado ≈ $2,264,000 | Total aportado = $1,500 × 360 meses = $540,000</div>
+        <div class="q-options" id="qo-9">
+          <div class="q-opt" onclick="selectOpt(9,'A')"><div class="q-opt-letter">A</div>Aproximadamente 24% provino del interés</div>
+          <div class="q-opt" onclick="selectOpt(9,'B')"><div class="q-opt-letter">B</div>Aproximadamente 50% provino del interés</div>
+          <div class="q-opt" onclick="selectOpt(9,'C')"><div class="q-opt-letter">C</div>Aproximadamente 76% provino del interés compuesto</div>
+          <div class="q-opt" onclick="selectOpt(9,'D')"><div class="q-opt-letter">D</div>Exactamente 100% provino del interés</div>
+        </div>
+        <div class="q-explanation" id="qe-9">✅ <strong>Correcto: C.</strong> De los ~$2,264,000 totales, aportaste $540,000 (24%) y el restante ~$1,724,000 (76%) lo generó el interés compuesto. Esto es el poder del "octavo maravilla del mundo" según Albert Einstein: el interés compuesto multiplica el dinero de quienes tienen paciencia.</div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="q-card" id="qc-10">
+        <div class="q-num-row"><div class="q-num">10</div><div class="q-text">Después de completar todos los ejercicios y ver cómo cambiaba tu saldo, ¿cuál es el principio más importante en finanzas personales?</div></div>
+        <div class="q-context">Reflexiona sobre todo lo que experimentaste: ganancias, pérdidas, intereses, comisiones y riesgos.</div>
+        <div class="q-options" id="qo-10">
+          <div class="q-opt" onclick="selectOpt(10,'A')"><div class="q-opt-letter">A</div>Invertir todo en criptomonedas porque tienen el mayor rendimiento</div>
+          <div class="q-opt" onclick="selectOpt(10,'B')"><div class="q-opt-letter">B</div>Guardar el dinero en efectivo para evitar cualquier riesgo</div>
+          <div class="q-opt" onclick="selectOpt(10,'C')"><div class="q-opt-letter">C</div>Empezar a invertir temprano, diversificar, controlar el riesgo y nunca detener la capitalización</div>
+          <div class="q-opt" onclick="selectOpt(10,'D')"><div class="q-opt-letter">D</div>Buscar siempre el activo con mayor rendimiento sin importar el riesgo</div>
+        </div>
+        <div class="q-explanation" id="qe-10">✅ <strong>Correcto: C.</strong> El tiempo es el activo más valioso en finanzas. Empezar temprano con la capitalización compuesta, diversificar para sobrevivir los ciclos malos, y controlar el riesgo para no perder lo ganado son los tres pilares de la riqueza sostenible. Los atajos (cripto explosiva, promesas de 50% mensual) casi siempre terminan en pérdida total.</div>
+      </div>
+
+      <button class="btn-submit" id="btn-submit" onclick="submitQuiz()" disabled>
+        🏆 Calificar mis respuestas
+      </button>
+    </div>
+
+    <!-- SCORE PANEL -->
+    <div class="score-panel" id="score-panel">
+      <div style="font-size:32px;margin-bottom:8px">🏆</div>
+      <div class="score-value" id="score-value">0/10</div>
+      <div class="score-label">Respuestas correctas</div>
+      <div class="score-grade" id="score-grade">—</div>
+      <div class="score-breakdown" id="score-breakdown"></div>
+      <button class="btn-restart" onclick="restartQuiz()">↺ Intentar de nuevo</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  FinMath Academy · Guía de Ejercicios Prácticos · Bachillerato · Matemáticas Financieras<br>
+  <span style="color:var(--text3);margin-top:4px;display:block">Desarrollado para el aprendizaje activo con el simulador interactivo</span>
+</div>
+
+<script>
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+const state = {
+  completed: new Set(),
+  answers: {},
+  quizAnswers: {},
+  quizSubmitted: false
+};
+
+const CORRECT = {1:'B',2:'B',3:'C',4:'C',5:'B',6:'B',7:'B',8:'C',9:'C',10:'C'};
+const UNLOCK_AT = 15;
+
+// ════════════════════════════════════
+// PROGRESS STEPS
+// ════════════════════════════════════
+function initSteps(){
+  const wrap = document.getElementById('pb-steps');
+  wrap.innerHTML = Array.from({length:20},(_,i)=>`<div class="pb-step" id="step-${i+1}" title="Ejercicio ${i+1}"></div>`).join('');
+}
+
+function updateProgress(){
+  const done = state.completed.size;
+  const pct = (done/20)*100;
+  document.getElementById('pb-fill').style.width = pct+'%';
+  document.getElementById('prog-num').textContent = done;
+  document.getElementById('pct-done').textContent = Math.round(pct)+'%';
+
+  for(let i=1;i<=20;i++){
+    const el = document.getElementById('step-'+i);
+    if(!el) continue;
+    el.classList.remove('done','current');
+    if(state.completed.has(i)) el.classList.add('done');
+    else if(i === (done+1)) el.classList.add('current');
+  }
+
+  // Quiz unlock
+  const locked = document.getElementById('quiz-locked');
+  const questions = document.getElementById('quiz-questions');
+  const qlText = document.getElementById('ql-prog-text');
+  if(qlText) qlText.textContent = `${done} / ${UNLOCK_AT} ejercicios completados`;
+
+  if(done >= UNLOCK_AT){
+    locked.style.display='none';
+    questions.style.display='block';
+  } else {
+    locked.style.display='block';
+    questions.style.display='none';
+  }
+}
+
+// ════════════════════════════════════
+// EXERCISE TOGGLE
+// ════════════════════════════════════
+function toggleEx(n){
+  const card = document.getElementById('ex-'+n);
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.ex-card.open').forEach(c=>c.classList.remove('open'));
+  if(!isOpen) card.classList.add('open','active-ex');
+  else card.classList.remove('active-ex');
+}
+
+function markDone(n){
+  state.completed.add(n);
+  const card = document.getElementById('ex-'+n);
+  card.classList.add('completed');
+  card.classList.remove('active-ex');
+  document.getElementById('unmark-'+n).style.display='inline-flex';
+  updateProgress();
+  saveState();
+  // Auto-open next
+  if(n < 20){
+    setTimeout(()=>{ toggleEx(n+1); document.getElementById('ex-'+n).classList.remove('open'); },200);
+  }
+}
+
+function unmarkDone(n){
+  state.completed.delete(n);
+  document.getElementById('ex-'+n).classList.remove('completed');
+  document.getElementById('unmark-'+n).style.display='none';
+  updateProgress();
+  saveState();
+}
+
+// ════════════════════════════════════
+// ANSWERS
+// ════════════════════════════════════
+function saveAnswer(n){
+  const val = document.getElementById('ans-'+n)?.value;
+  if(val !== undefined){
+    state.answers[n] = val;
+    const saved = document.getElementById('saved-'+n);
+    if(saved){ saved.classList.add('visible'); setTimeout(()=>saved.classList.remove('visible'),2000); }
+    saveState();
+  }
+}
+
+// ════════════════════════════════════
+// QUIZ
+// ════════════════════════════════════
+function selectOpt(q, letter){
+  if(state.quizSubmitted) return;
+  state.quizAnswers[q] = letter;
+
+  const opts = document.querySelectorAll(`#qo-${q} .q-opt`);
+  opts.forEach((opt,i)=>{
+    opt.classList.remove('selected-correct','selected-wrong');
+    const optLetter = ['A','B','C','D'][i];
+    if(optLetter === letter){
+      opt.classList.add('selected-correct'); // just highlight as selected
+    }
+  });
+
+  // Check if all 10 answered
+  if(Object.keys(state.quizAnswers).length === 10){
+    document.getElementById('btn-submit').disabled = false;
+  }
+  saveState();
+}
+
+function submitQuiz(){
+  state.quizSubmitted = true;
+  let correct = 0;
+  const breakdown = [];
+
+  for(let q=1;q<=10;q++){
+    const userAns = state.quizAnswers[q];
+    const corrAns = CORRECT[q];
+    const isCorrect = userAns === corrAns;
+    if(isCorrect) correct++;
+    breakdown.push({q, userAns, corrAns, isCorrect});
+
+    // Mark options
+    const opts = document.querySelectorAll(`#qo-${q} .q-opt`);
+    opts.forEach((opt,i)=>{
+      opt.classList.remove('selected-correct','selected-wrong');
+      const letter = ['A','B','C','D'][i];
+      if(letter === corrAns) opt.classList.add('reveal-correct');
+      if(letter === userAns && !isCorrect) opt.classList.add('selected-wrong');
+      if(letter === userAns && isCorrect) opt.classList.add('selected-correct');
+    });
+
+    // Show explanation
+    const exp = document.getElementById('qe-'+q);
+    if(exp) exp.classList.add('show');
+
+    // Mark card
+    const card = document.getElementById('qc-'+q);
+    if(card) card.classList.add('answered');
+  }
+
+  // Show score
+  const pct = Math.round((correct/10)*100);
+  let grade, gradeClass;
+  if(correct >= 9){grade='A — Excelente 🏆';gradeClass='grade-a'}
+  else if(correct >= 7){grade='B — Muy bien ✅';gradeClass='grade-b'}
+  else if(correct >= 5){grade='C — Suficiente 📘';gradeClass='grade-c'}
+  else{grade='D — Repasa los módulos 📖';gradeClass='grade-d'}
+
+  document.getElementById('score-value').textContent = `${correct}/10`;
+  document.getElementById('score-grade').textContent = grade;
+  document.getElementById('score-grade').className = 'score-grade '+gradeClass;
+
+  const bd = document.getElementById('score-breakdown');
+  bd.innerHTML = breakdown.map(b=>`<div class="sb-item"><div class="sb-num" style="color:${b.isCorrect?'var(--green)':'var(--red)'}">${b.isCorrect?'✓':'✗'}</div><div class="sb-lab">P. ${b.q}</div></div>`).join('');
+
+  document.getElementById('score-panel').classList.add('visible');
+  document.getElementById('btn-submit').style.display='none';
+
+  // Scroll to score
+  setTimeout(()=>document.getElementById('score-panel').scrollIntoView({behavior:'smooth',block:'center'}),300);
+  saveState();
+}
+
+function restartQuiz(){
+  state.quizAnswers = {};
+  state.quizSubmitted = false;
+  for(let q=1;q<=10;q++){
+    const opts = document.querySelectorAll(`#qo-${q} .q-opt`);
+    opts.forEach(opt=>opt.classList.remove('selected-correct','selected-wrong','reveal-correct'));
+    const exp = document.getElementById('qe-'+q);
+    if(exp) exp.classList.remove('show');
+    const card = document.getElementById('qc-'+q);
+    if(card) card.classList.remove('answered');
+  }
+  document.getElementById('score-panel').classList.remove('visible');
+  document.getElementById('btn-submit').style.display='block';
+  document.getElementById('btn-submit').disabled=true;
+  saveState();
+}
+
+// ════════════════════════════════════
+// PERSISTENCE
+// ════════════════════════════════════
+function saveState(){
+  try{
+    localStorage.setItem('finmath_guide',JSON.stringify({
+      completed:[...state.completed],
+      answers:state.answers,
+      quizAnswers:state.quizAnswers,
+      quizSubmitted:state.quizSubmitted
+    }));
+  } catch(e){}
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem('finmath_guide');
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    state.completed = new Set(s.completed||[]);
+    state.answers = s.answers||{};
+    state.quizAnswers = s.quizAnswers||{};
+    state.quizSubmitted = s.quizSubmitted||false;
+
+    // Restore UI
+    state.completed.forEach(n=>{
+      const card = document.getElementById('ex-'+n);
+      if(card) card.classList.add('completed');
+      const unmark = document.getElementById('unmark-'+n);
+      if(unmark) unmark.style.display='inline-flex';
+    });
+    Object.entries(state.answers).forEach(([n,v])=>{
+      const el = document.getElementById('ans-'+n);
+      if(el) el.value=v;
+    });
+    if(state.quizSubmitted && Object.keys(state.quizAnswers).length===10){
+      // Restore quiz answers silently then submit
+      Object.entries(state.quizAnswers).forEach(([q,letter])=>{
+        state.quizAnswers[parseInt(q)] = letter;
+      });
+      if(document.getElementById('quiz-questions').style.display!=='none'){
+        submitQuiz();
+      }
+    } else {
+      Object.entries(state.quizAnswers).forEach(([q,letter])=>{
+        selectOpt(parseInt(q),letter);
+      });
+    }
+  } catch(e){}
+}
+
+// ════════════════════════════════════
+// INIT
+// ════════════════════════════════════
+initSteps();
+loadState();
+updateProgress();
+// Open first incomplete exercise
+if(state.completed.size < 20){
+  for(let i=1;i<=20;i++){
+    if(!state.completed.has(i)){ toggleEx(i); break; }
+  }
+}
+</script>
+</body>
+</html>
